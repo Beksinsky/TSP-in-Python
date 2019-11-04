@@ -47,26 +47,28 @@ def template():
 
 def population(n):
     global populationArray
-    populationArray = [[], []]
+    populationArray = []
     i = 0
     while i < n:
         random.shuffle(membersTemplate)
-        populationArray[0].append(membersTemplate[:])
+        populationArray.append(membersTemplate[:])
         i += 1
 
 
 def fitness():
+    global fitnessArray
+    fitnessArray = []
     i = 0
-    while i < len(populationArray[0]):
+    while i < len(populationArray):
         j = 0
         fit = 0
-        while j < len(populationArray[0][i]):
-            if j + 1 != len(populationArray[0][i]):
-                fit += int(matrix[populationArray[0][i][j]][populationArray[0][i][j + 1]])
-                #koleny while od lenth -1 do index 0
+        while j < len(populationArray[i]):
+            if j + 1 != len(populationArray[i]):
+                fit += int(matrix[populationArray[i][j]][populationArray[i][j + 1]])
+                # koleny while od lenth -1 do index 0
             else:
-                fit += int(matrix[populationArray[0][i][j]][populationArray[0][i][0]])
-                populationArray[1].append(fit)
+                fit += int(matrix[populationArray[i][j]][populationArray[i][0]])
+                fitnessArray.append(fit)
             j += 1
         i += 1
 
@@ -74,7 +76,7 @@ def fitness():
 def saveWynik():
     wynik = open("wynik.txt", "w+")
     i = 0
-    for _list in populationArray[0]:
+    for _list in populationArray:
         j = 0
         for _miasto in _list:
             if j != len(_list) - 1:
@@ -82,7 +84,7 @@ def saveWynik():
             else:
                 wynik.write(str(_miasto) + " ")
             j += 1
-        wynik.write(str(populationArray[1][i]))
+        wynik.write(str(fitnessArray[i]))
         wynik.write('\n')
         i += 1
     wynik.close()
@@ -93,7 +95,7 @@ template()
 population(popNum)
 fitness()
 saveWynik()
-print(populationArray[0])
-print(populationArray[1])
+print(populationArray)
+print(fitnessArray)
 print()
 print("--- %s seconds ---" % (time.time() - start))
